@@ -9,7 +9,7 @@
 	<body>
 		<header>
 			<!--BF logo!-->
-			<img src="http://bluefireprime.com/view/images/bfLogo400x100.png">
+			<img src="view/images/bfLogo400x100.png">
 		</header>
 		
 		<nav>
