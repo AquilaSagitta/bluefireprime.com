@@ -1,65 +1,1 @@
-html
-{
-color: white;
-}
-
-body
-{
-background: #000000 url(http://bluefireprime.com/view/images/simpleBackground.jpg) no-repeat center top;
-background-attachment: fixed;
-width: 1000px;
-margin-left: auto;
-margin-right: auto;
-}
-
-nav
-{
-background: linear-gradient(#8F8F8F,#404040);
-height: 50px;
-clear: both;
-}
-
-nav ul
-{
-list-style-type: none;
-margin: 0;
-padding: 0;
-}
-
-nav ul a
-{
-text-decoration: none;
-}
-
-nav ul li
-{
-display: inline;
-float: left;
-padding: 15px 20px 12px 20px;
-margin-top: auto;
-margin-bottom: auto;
-color: white;
-}
-
-nav ul li:hover
-{
-background: white;
-color: blue;
-}
-
-footer
-{
-height: 150px;
-width: 980px;
-padding: 10px;
-margin-top: 15px;
-background: #1C1C1C;
-font-size: xx-small;
-text-align: center;
-}
-
-footer span{
-	height: 150px;
-    display: table-cell;
-    vertical-align: middle;
-}
+html{color: white;}body{background: #000000 url(http://bluefireprime.com/view/images/simpleBackground.jpg) no-repeat center top;background-attachment: fixed;width: 1000px;margin-left: auto;margin-right: auto;}nav{background: linear-gradient(#8F8F8F,#404040);height: 50px;clear: both;}nav ul{list-style-type: none;margin: 0;padding: 0;}nav ul a{text-decoration: none;}nav ul li{display: inline;float: left;padding: 15px 20px 12px 20px;margin-top: auto;margin-bottom: auto;color: white;}nav ul li:hover{background: white;color: blue;}footer{height: 150px;width: 980px;padding: 10px;margin-top: 15px;background: #1C1C1C;font-size: xx-small;text-align: center;}footer span{	height: 150px;    display: table-cell;    vertical-align: middle;}.error {	background-color: rgba(255, 0, 0, 0.5);	color: white;}#notifications{	background-color: rgba(255, 0, 0, 0.5);	color: white;}

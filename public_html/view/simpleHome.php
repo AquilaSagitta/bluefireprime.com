@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title><?php echo 'Vertical | Home'; ?></title>
+		<title><?php echo 'Blue-Fire | Home'; ?></title>
 		<meta></meta>
 		<link rel="stylesheet" type="text/css" href="view/css/simple.css"/>
 		<script src="jquery.js"></script>
@@ -15,10 +15,10 @@
 		<nav>
 			<ul>
 				<a href="http://eol.eve-kill.net/"><li>Killboard</li></a>
-				<a href="https://www.youtube.com/channel/UCJFs088B3HJhOMW1eD36G4A"><li>YouTube Channel</li></a>
+				<a href="https://www.youtube.com/channel/UCJFs088B3HJhOMW1eD36G4A"><li>YouTube Channel</li></a>								<li id='login-button'>Login</li>
 			</ul>
-		</nav>
-		
+		</nav>				<div id='notifications'></div>
+		<div id='login-wrapper'></div>
 		<section>
 			<p>Presumably you are looking at our corp description because you want to know who the F*ck Blue-Fire is or what the F*ck we do. Well let me fill you in...</p>
 			<p>Blue-Fire plays EVE exclusively in BOSS-Mode. We do everything you do, but better. This is not up for debate, it is a FACT. We blow shit up, we welp fleets,
@@ -40,6 +40,6 @@
 			purposes on its website but does not endorse, and is not in any way affiliated with, bluefireprime.com. CCP is in no way responsible for the content on
 			or functioning of this website, nor can it be liable for any damage arising from the use of this website.
 			</span>
-		</footer>
+		</footer>				<script src="view/js/login.js"></script>
 	</body>
 </html>
