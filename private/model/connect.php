@@ -27,9 +27,23 @@ class Connect {
 		if($data = $this->db->Query('SELECT '.$col1.' FROM '.$table.' WHERE '.$col2.' '.$operator.' '.'\''.$item.'\'')) {
 			return $data;
 		} else {
-			//echo 'SELECT '.$col1.' FROM '.$table.' WHERE '.$col2.' '.$operator.' '.$item;
 			return false;
 		}
+	}
+	
+	public function setItem($item1, $item2) {
+		$item1 = mysqli_real_escape_string($this->db, $item1);
+		$item2 = mysqli_real_escape_string($this->db, $item2);
+		
+		if($data = $this->db->Query('INSERT INTO users (username, password) VALUES (\''.$item1.'\',\''.$item2.'\')')) {
+			echo 'Successfully registered!';
+		} else {
+			die('Error: '.mysqli_error($this->db));
+		}
+	}
+	
+	public function close() {
+		mysqli_close($this->db);
 	}
 }
 ?>
