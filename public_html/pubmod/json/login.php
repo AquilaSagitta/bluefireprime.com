@@ -15,4 +15,5 @@
 			echo 'Incorrect username or password!';
 		}
 	}
+	$database->close();
 ?>
