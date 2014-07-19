@@ -34,6 +34,7 @@ $(document).ready(function() {
 					return false;
 				} else if(loginClicked) {
 					//input is valid so send it to model
+					loginClicked=false; //so doesn't fire again unless clicked again
 					var item = $.post('pubmod/json/login.php', $('#login-form').serialize());
 					item.done(function(data){
 						//response. Notify user if error or welcome them if logged in successfully
@@ -52,6 +53,7 @@ $(document).ready(function() {
 					return false; //don't reload page on submit
 				} else if(registerClicked) {
 					//input is valid so send it to model
+					registerClicked=false; //so doesn't fire again unless clicked again
 					var item = $.post('pubmod/json/register.php', $('#login-form').serialize());
 					item.done(function(data){
 						//response. Check if username or password is long enough.
