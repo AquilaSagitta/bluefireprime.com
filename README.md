@@ -1,4 +1,4 @@
 bluefireprime.com
 =================
 
-Corp Website for Eve Online
+Eve Online Corp Website
