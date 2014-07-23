@@ -39,16 +39,17 @@ $(document).ready(function() {
 					item.done(function(data){
 						//response. Notify user if error or welcome them if logged in successfully
 						if(data=="User doesn\'t exist!") {
-							$('#notifications').html(data); //this should never happen but just in case
+							notification(data); //this should never happen but just in case
 						} else if(data=="Incorrect username or password!") {
-							$('#notifications').html(data);
+							notification(data);
 						} else {
 							$('#login-wrapper').html('Welcome '+data+'!');
+							$('#notifications').empty();
 						}
 					});
 					item.error(function(){
 						//errors go to hidden notifications div
-						$('#notifications').html('Error: Something broke');
+						notification('Error: Something broke');
 					});
 					return false; //don't reload page on submit
 				} else if(registerClicked) {
@@ -59,11 +60,12 @@ $(document).ready(function() {
 						//response. Check if username or password is long enough.
 						//Then check if duplicate username. Inform user upon success or failure.
 						if(data=='Username is too short! Must be at least 5 characters.'||data=='Password is too short! Must be at least 5 characters.') {
-							$('#notifications').html(data);
+							notification(data);
 						} else if(data.indexOf('Duplicate')>-1) {
-							$('#notifications').html('Username is already taken!');
+							notification('Username is already taken!');
 						} else {
 							$('#login-wrapper').html('Successfully registered!');
+							$('#notifications').empty();
 						}
 					});
 					item.error(function(){
@@ -75,4 +77,15 @@ $(document).ready(function() {
 			});
 		});
 	});
+	$('#notifications').on('click', '.note-close', function(){
+		$(this).parent().remove();
+	});
 });
+
+function notification(message) {
+	$('#notifications').append(''+
+		'<div class="error">'+
+		'<button class="note-close"></button>'+
+		message+
+		'</div>');
+}
