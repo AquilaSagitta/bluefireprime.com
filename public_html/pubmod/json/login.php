@@ -9,7 +9,7 @@
 		echo 'User doesn\'t exist!';
 	} else {
 		$data = $data->fetch_array();
-		if($data[2]==hash('ripemd160',$_POST['pass'])) {
+		if(password_verify($_POST['pass'], $data[2])) {
 			echo $_POST['user'];
 		} else {
 			echo 'Incorrect username or password!';

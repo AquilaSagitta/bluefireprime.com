@@ -13,10 +13,8 @@
 		echo 'Username is too long! Must be less then or equal to 20 characters.';
 	} else if(strlen($pass)<5) {
 		echo 'Password is too short! Must be at least 5 characters.';
-	} else if(strlen($pass)>40) {
-		echo 'Password is too long! Must be less then or equal to 40 characters.';
 	} else {
-		$pass = hash('ripemd160',$pass);
+		$pass = password_hash($pass, PASSWORD_BCRYPT);
 		$database->setItem($user,$pass);
 	}
 	
