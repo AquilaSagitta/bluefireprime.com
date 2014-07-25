@@ -15,8 +15,12 @@ $(document).ready(function() {
 			$('input').first().focus(); //focus first input
 			
 			$(this).submit(function() {
+				//bot trap
+				if($('input[name=honey]').val()) {
+					return;
+				}
 				//get all inputs besides submit
-				var input = $('input').not('input[type=Submit]');
+				var input = $('input').not('input[type=Submit],input[type=hidden]');
 				//check input is valid(isn't empty)
 				var check;
 				$(input).each(function(){
