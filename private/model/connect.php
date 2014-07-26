@@ -36,7 +36,7 @@ class Connect {
 		$item2 = mysqli_real_escape_string($this->db, $item2);
 		
 		if($data = $this->db->Query('INSERT INTO users (username, password) VALUES (\''.$item1.'\',\''.$item2.'\')')) {
-			echo 'Successfully registered!';
+			echo $item1;
 		} else {
 			die('Error: '.mysqli_error($this->db));
 		}

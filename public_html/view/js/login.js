@@ -5,11 +5,18 @@ $(document).ready(function() {
 			//check which submit button was clicked
 			var registerClicked = false;
 			var loginClicked = false;
+			var verifyClicked = false;
 			$('input[value=Login]').click(function(){
+				console.log('loginclicked');
 				loginClicked=true;
 			});
 			$('input[value=Register]').click(function(){
+				console.log('registerclicked');
 				registerClicked=true;
+			});
+			$('#login-wrapper').on('click','input[value=Verify]',function(){
+				console.log('verifyclicked');
+				verifyClicked=true;
 			});
 			
 			$('input').first().focus(); //focus first input
@@ -49,6 +56,7 @@ $(document).ready(function() {
 						} else {
 							$('#login-wrapper').html('Welcome '+data+'!');
 							$('#notifications').empty();
+							checkVerify(data);
 						}
 					});
 					item.error(function(){
@@ -68,9 +76,23 @@ $(document).ready(function() {
 						} else if(data.indexOf('Duplicate')>-1) {
 							notification('Username is already taken!');
 						} else {
-							$('#login-wrapper').html('Successfully registered!');
+							$('#login-wrapper').html('Successfully registered as '+data+'!');
 							$('#notifications').empty();
+							checkVerify(data);
 						}
+					});
+					item.error(function(){
+						//errors go to hidden notifications div
+						$('#notifications').html('Ajax failed!');
+					});
+					return false; //don't reload page on submit
+				} else if(verifyClicked) {
+					//input is valid so send it to model
+					verifyClicked=false; //so doesn't fire again unless clicked again
+					var item = $.post('pubmod/json/verify.php', $('#verify-form').serialize());
+					item.done(function(data){
+						//response.
+						$('#login-wrapper').html(data);
 					});
 					item.error(function(){
 						//errors go to hidden notifications div
@@ -86,10 +108,22 @@ $(document).ready(function() {
 	});
 });
 
+$('#notifications').on('click', '#verify-button', function(){
+	$('#notifications').empty();
+	$('#login-wrapper').load('view/forms/verify.html');
+});
+
 function notification(message) {
 	$('#notifications').append(''+
 		'<div class="error">'+
 		'<button class="note-close"></button>'+
 		message+
 		'</div>');
+}
+
+function checkVerify(username) {
+	$.post('../../pubmod/json/verify.php', {name: username}, function(data){
+		console.log(data);
+		if(!data) $('#notifications').html(' '+username+' is not verified! <button id="verify-button">Click to begin verification.</button>');
+	});
 }
