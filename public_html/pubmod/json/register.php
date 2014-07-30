@@ -16,6 +16,7 @@
 	} else {
 		$pass = password_hash($pass, PASSWORD_BCRYPT);
 		$database->setItem('username','password',$user,$pass);
+		echo $user;
 	}
 	
 	$database->close();

@@ -27,7 +27,8 @@ class Connect {
 		if($data = $this->db->Query('SELECT '.$col1.' FROM '.$table.' WHERE '.$col2.' '.$operator.' '.'\''.$item.'\'')) {
 			return $data;
 		} else {
-			return false;
+			echo 'SELECT '.$col1.' FROM '.$table.' WHERE '.$col2.' '.$operator.' '.'\''.$item.'\'';
+			//die('Error: '.mysqli_error($this->db));
 		}
 	}
 	
@@ -40,8 +41,8 @@ class Connect {
 		}
 	}
 	
-	public function updateItem($user,$col,$item) {
-		$item = $this->sanitizeEmail($item);
+	public function updateItem($user,$col,$item,$sanitize) {
+		if($sanitize) $item = $this->sanitizeEmail($item);
 		
 		if(!$data = $this->db->Query('Update users SET '.$col.' = \''.$item.'\' WHERE username = \''.$user.'\'')){
 			die('Error: '.mysqli_error($this->db));

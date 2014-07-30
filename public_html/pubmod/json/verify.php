@@ -14,8 +14,23 @@
 			echo 'Invalid Email';
 		} else {
 			$a = $database->sanitizeEmail($_POST['email']);
-			$database->updateItem($_POST['user'],'primaryEmail',$a);
-			echo 'An email was sent to '.$a.' with a verification link.';
+			$database->updateItem($_POST['user'],'primaryEmail',$a,true);
+			
+			$key = md5( rand(0,1000) );
+			$database->updateItem($_POST['user'],'hash',$key,false);
+			
+			$from = 'noreply@bluefireprime.com';
+			$subject = 'bluefireprime.com Verification';
+			$message = 'Hello '.$_POST['user'].",\n
+	You recently requested a verification email from bluefireprime.com.\n\n
+	Click this link to verify your account: bluefireprime.com/pubmod/verified.php?user=".$_POST['user']."&key=".$key;
+			
+			if(mail($a,$subject,$message,"From: $from\n")) {
+				echo 'An email was sent to '.$a.' with a verification link.';
+			} else {
+				echo 'Email failed!';
+			}
 		}
 	}
+	$database->close();
 ?>
