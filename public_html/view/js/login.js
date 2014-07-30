@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	var user;
 	//open login form into hidden div
 	$('#login-button').click(function() {
 		$('#login-wrapper').load("view/forms/login.html", function() {
@@ -7,15 +8,15 @@ $(document).ready(function() {
 			var loginClicked = false;
 			var verifyClicked = false;
 			$('input[value=Login]').click(function(){
-				console.log('loginclicked');
+				//console.log('loginclicked');
 				loginClicked=true;
 			});
 			$('input[value=Register]').click(function(){
-				console.log('registerclicked');
+				//console.log('registerclicked');
 				registerClicked=true;
 			});
 			$('#login-wrapper').on('click','input[value=Verify]',function(){
-				console.log('verifyclicked');
+				//console.log('verifyclicked');
 				verifyClicked=true;
 			});
 			
@@ -38,7 +39,7 @@ $(document).ready(function() {
 						$(this).removeClass("error");
 						check = true;
 					}
-					console.log(check);
+					//console.log(check);
 				});
 				if(!check) {
 					//input isn't valid so break out of function
@@ -54,6 +55,7 @@ $(document).ready(function() {
 						} else if(data=="Incorrect username or password!") {
 							notification(data);
 						} else {
+							user = data;
 							$('#login-wrapper').html('Welcome '+data+'!');
 							$('#notifications').empty();
 							checkVerify(data);
@@ -76,6 +78,7 @@ $(document).ready(function() {
 						} else if(data.indexOf('Duplicate')>-1) {
 							notification('Username is already taken!');
 						} else {
+							user = data;
 							$('#login-wrapper').html('Successfully registered as '+data+'!');
 							$('#notifications').empty();
 							checkVerify(data);
@@ -89,7 +92,7 @@ $(document).ready(function() {
 				} else if(verifyClicked) {
 					//input is valid so send it to model
 					verifyClicked=false; //so doesn't fire again unless clicked again
-					var item = $.post('pubmod/json/verify.php', $('#verify-form').serialize());
+					var item = $.post('pubmod/json/verify.php', $('#verify-form').serialize()+"&user="+encodeURIComponent(user));
 					item.done(function(data){
 						//response.
 						$('#login-wrapper').html(data);
@@ -106,11 +109,10 @@ $(document).ready(function() {
 	$('#notifications').on('click', '.note-close', function(){
 		$(this).parent().remove();
 	});
-});
-
-$('#notifications').on('click', '#verify-button', function(){
-	$('#notifications').empty();
-	$('#login-wrapper').load('view/forms/verify.html');
+	$('#notifications').on('click', '#verify-button', function(){
+		$('#notifications').empty();
+		$('#login-wrapper').load('view/forms/verify.html');
+	});
 });
 
 function notification(message) {
@@ -123,7 +125,6 @@ function notification(message) {
 
 function checkVerify(username) {
 	$.post('../../pubmod/json/verify.php', {name: username}, function(data){
-		console.log(data);
-		if(!data) $('#notifications').html(' '+username+' is not verified! <button id="verify-button">Click to begin verification.</button>');
+		if(data=="false") $('#notifications').html(' '+username+' is not verified! <button id="verify-button">Click to begin verification.</button>');
 	});
 }
