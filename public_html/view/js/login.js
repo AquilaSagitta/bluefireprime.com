@@ -1,15 +1,23 @@
 $(document).ready(function() {
+	var user;
 	//open login form into hidden div
 	$('#login-button').click(function() {
 		$('#login-wrapper').load("view/forms/login.html", function() {
 			//check which submit button was clicked
 			var registerClicked = false;
 			var loginClicked = false;
+			var verifyClicked = false;
 			$('input[value=Login]').click(function(){
+				//console.log('loginclicked');
 				loginClicked=true;
 			});
 			$('input[value=Register]').click(function(){
+				//console.log('registerclicked');
 				registerClicked=true;
+			});
+			$('#login-wrapper').on('click','input[value=Verify]',function(){
+				//console.log('verifyclicked');
+				verifyClicked=true;
 			});
 			
 			$('input').first().focus(); //focus first input
@@ -31,7 +39,7 @@ $(document).ready(function() {
 						$(this).removeClass("error");
 						check = true;
 					}
-					console.log(check);
+					//console.log(check);
 				});
 				if(!check) {
 					//input isn't valid so break out of function
@@ -47,8 +55,10 @@ $(document).ready(function() {
 						} else if(data=="Incorrect username or password!") {
 							notification(data);
 						} else {
+							user = data;
 							$('#login-wrapper').html('Welcome '+data+'!');
 							$('#notifications').empty();
+							checkVerify(data);
 						}
 					});
 					item.error(function(){
@@ -68,9 +78,24 @@ $(document).ready(function() {
 						} else if(data.indexOf('Duplicate')>-1) {
 							notification('Username is already taken!');
 						} else {
-							$('#login-wrapper').html('Successfully registered!');
+							user = data;
+							$('#login-wrapper').html('Successfully registered as '+data+'!');
 							$('#notifications').empty();
+							checkVerify(data);
 						}
+					});
+					item.error(function(){
+						//errors go to hidden notifications div
+						$('#notifications').html('Ajax failed!');
+					});
+					return false; //don't reload page on submit
+				} else if(verifyClicked) {
+					//input is valid so send it to model
+					verifyClicked=false; //so doesn't fire again unless clicked again
+					var item = $.post('pubmod/json/verify.php', $('#verify-form').serialize()+"&user="+encodeURIComponent(user));
+					item.done(function(data){
+						//response.
+						$('#login-wrapper').html(data);
 					});
 					item.error(function(){
 						//errors go to hidden notifications div
@@ -84,6 +109,10 @@ $(document).ready(function() {
 	$('#notifications').on('click', '.note-close', function(){
 		$(this).parent().remove();
 	});
+	$('#notifications').on('click', '#verify-button', function(){
+		$('#notifications').empty();
+		$('#login-wrapper').load('view/forms/verify.html');
+	});
 });
 
 function notification(message) {
@@ -92,4 +121,10 @@ function notification(message) {
 		'<button class="note-close"></button>'+
 		message+
 		'</div>');
+}
+
+function checkVerify(username) {
+	$.post('../../pubmod/json/verify.php', {name: username}, function(data){
+		if(data=="false") $('#notifications').html(' '+username+' is not verified! <button id="verify-button">Click to begin verification.</button>');
+	});
 }
