@@ -92,6 +92,12 @@ $(document).ready(function() {
 				} else if(verifyClicked) {
 					//input is valid so send it to model
 					verifyClicked=false; //so doesn't fire again unless clicked again
+					var val = $('input[name=email]').val();
+					if(val.length>50) {
+						$('input[name=email]').addClass('error');
+						notification('Email must be under 50 characters!');
+						return false;
+					}
 					var item = $.post('pubmod/json/verify.php', $('#verify-form').serialize()+"&user="+encodeURIComponent(user));
 					item.done(function(data){
 						//response.
@@ -112,6 +118,7 @@ $(document).ready(function() {
 	$('#notifications').on('click', '#verify-button', function(){
 		$('#notifications').empty();
 		$('#login-wrapper').load('view/forms/verify.html');
+		$('input').first().focus(); //focus first input
 	});
 });
 
