@@ -23,7 +23,7 @@
 			$subject = 'bluefireprime.com Verification';
 			$message = 'Hello '.$_POST['user'].",\n
 	You recently requested a verification email from bluefireprime.com.\n\n
-	Click this link to verify your account: bluefireprime.com/pubmod/verified.php?user=".$_POST['user']."&key=".$key;
+	Click this link to verify your account: https://bluefireprime.com/pubmod/verified.php?user=".$_POST['user']."&key=".$key;
 			
 			if(mail($a,$subject,$message,"From: $from\n")) {
 				echo 'An email was sent to '.$a.' with a verification link.';

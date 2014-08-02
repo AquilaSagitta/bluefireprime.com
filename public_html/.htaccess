@@ -1,5 +1,5 @@
 Options All -Indexes
-<FilesMatch ".htaccess|error_log">
-  Order allow,deny
-  Deny from all
-</FilesMatch>
+<Files .htaccess>
+order allow,deny
+deny from all
+</Files>

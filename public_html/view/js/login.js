@@ -22,7 +22,7 @@ $(document).ready(function() {
 			
 			$('input').first().focus(); //focus first input
 			
-			$(this).submit(function() {
+			$(this).unbind('submit').bind('submit',function() {
 				//bot trap
 				if($('input[name=honey]').val()) {
 					return;
@@ -99,6 +99,7 @@ $(document).ready(function() {
 						return false;
 					}
 					var item = $.post('pubmod/json/verify.php', $('#verify-form').serialize()+"&user="+encodeURIComponent(user));
+					console.log('ajax to email server');
 					item.done(function(data){
 						//response.
 						$('#login-wrapper').html(data);
