@@ -90,7 +90,7 @@
 
 		</footer>
 		
-		<script src="view/js/login.js"></script>
+		<script src="view/js/auth.js"></script>
 
 	</body>
 

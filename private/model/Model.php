@@ -1,59 +1,75 @@
 <?php
-//include_once("other/classes/go/here");
+require_once('../private/model/Connect.php');
 
 class Model {
-	public function liveChat()
-	{
-		//database stuff
+	public $connect;
+	
+	public function __construct() {
+		$this->connect = new Connect();
+	}
+	
+	public function checkLogin($user,$pass) {
+		$data = $this->connect->getItem('*','users','username',$user,'=');
 		
-		//return array(of chat);
+		if(!$data) {
+			return false;
+		} else {
+			$data = $data->fetch_array();
+			if(password_verify($pass,$data[2])) {
+				return $user;
+			} else {
+				return false;
+			}
+		}
 	}
 	
-	public function pubChat() {
-	
-	}
-	
-	public function getQuery()
-	{
-		//search logic
+	public function register($user,$pass) {
+		$pass = password_hash($pass, PASSWORD_BCRYPT);
+		$this->connect->setItem('username','password',$user,$pass);
 		
-		//return array(of hits);
+		return $user;
 	}
 	
-	public function checkIGB() {
-		//return true or false
+	public function emailVerify($email) {
+		if(!$this->connect->sanitizeEmail($_POST['email'])) {
+			echo 'Invalid Email';
+		} else {
+			$a = $this->connect->sanitizeEmail($_POST['email']);
+			$this->connect->updateItem($_POST['user'],'primaryEmail',$a,true);
+			
+			$key = md5( rand(0,1000) );
+			$this->connect->updateItem($_POST['user'],'hash',$key,false);
+			
+			$from = 'noreply@bluefireprime.com';
+			$subject = 'bluefireprime.com Verification';
+			$message = 'Hello '.$_POST['user'].",\n
+	You recently requested a verification email from bluefireprime.com.\n\n
+	Click this link to verify your account: https://bluefireprime.com/pubmod/verified.php?user=".$_POST['user']."&key=".$key;
+			
+			if(mail($a,$subject,$message,"From: $from\n")) {
+				echo 'An email was sent to '.$a.' with a verification link.';
+			} else {
+				echo 'Email failed!';
+			}
+		}
 	}
 	
-	public function checkCorpExist() {
-		//check db if corp is registered
-	}
-	
-	public function checkUser() {
-		//return true or false;
-	}
-	
-	public function checkPerms() {
-		//return true or false;
-	}
-	
-	public function checkTags() {
-		//return true or false;
-	}
-	
-	public function getCorp() {
-		//return corp name as string
-	}
-	
-	public function getPerms() {
-		//return array of permissions
-	}
-	
-	public function getUsername() {
-		//return user name as string
-	}
-	
-	public function getTags() {
-		//return tags as array
+	public function verify($get) {
+		$user = $get['user'];
+		$key = $get['key'];
+		
+		if($test = $this->connect->getItem('hash','users','username',$user,'=')) {
+			$test = $test->fetch_assoc();
+			if($test['hash']==$key) {
+				echo $user.' has been verified!';
+				$this->connect->updateItem($user,'verified','1',false);
+				$this->connect->updateItem($user,'hash',null,false);
+			} else {
+				echo 'Keys do not match!';
+			}
+		} else {
+			echo 'Connection failed!';
+		}
 	}
 }
 ?>

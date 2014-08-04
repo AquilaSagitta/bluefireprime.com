@@ -1,9 +1,11 @@
 <?php
+require_once('../private/config.php');
+
 class Connect {
 	public $db;
 	
 	public function __construct() {
-		include_once(__DIR__.'/config.php');
+		global $host,$user,$pass,$data;
 	
 		//connect to database
 		$this->db = new mysqli($host,$user,$pass,$data);
@@ -27,8 +29,8 @@ class Connect {
 		if($data = $this->db->Query('SELECT '.$col1.' FROM '.$table.' WHERE '.$col2.' '.$operator.' '.'\''.$item.'\'')) {
 			return $data;
 		} else {
-			echo 'SELECT '.$col1.' FROM '.$table.' WHERE '.$col2.' '.$operator.' '.'\''.$item.'\'';
-			//die('Error: '.mysqli_error($this->db));
+			//echo 'SELECT '.$col1.' FROM '.$table.' WHERE '.$col2.' '.$operator.' '.'\''.$item.'\'';
+			die('Error: '.mysqli_error($this->db));
 		}
 	}
 	
@@ -36,7 +38,8 @@ class Connect {
 		$item1 = $this->sanitize($item1);
 		$item2 = $this->sanitize($item2);
 		
-		if(!$data = $this->db->Query('INSERT INTO users ('.$col1.','.$col2.') VALUES (\''.$item1.'\',\''.$item2.'\')')) {
+		if(!$this->db->Query('INSERT INTO users ('.$col1.','.$col2.') VALUES (\''.$item1.'\',\''.$item2.'\')')) {
+			//echo 'INSERT INTO users ('.$col1.','.$col2.') VALUES (\''.$item1.'\',\''.$item2.'\')';
 			die('Error: '.mysqli_error($this->db));
 		}
 	}
