@@ -9,6 +9,7 @@ $('#login-button').unbind().bind('click',function() {
 			$.post('/index.php', $('#login-form').serialize()+"&login="+encodeURIComponent(true), function(data) {
 				console.log(data);
 				$('#login-wrapper').html(data);
+				if(!data.verified) notify('You\re not verified!<button id="getVerified">Verify</button>');
 			});
 			return false;
 		});
@@ -32,13 +33,28 @@ $('#login-wrapper').on('click','input[value=ToRegister]', function(){
 			if(!validate('user','text',0)||!validate('pass','text',0)||!validate('pass2','text',0)) return false;
 			if(!validate('pass','password','pass2')) return false;
 			$.post('/index.php', $('#login-form').serialize()+"&register="+encodeURIComponent(true), function(data) {
-				console.log(data);
+				console.log($('#login-form').serialize()+"&register="+encodeURIComponent(true));
 				$('#login-wrapper').html(data);
 			});
 			return false;
 		});
 	});
 	return false;
+});
+
+$('#notifications').on('click','#getVerified', function(){
+	$('#notifications').empty();
+	$('#login-wrapper').load('/view/forms/verify.html', function(){
+		$('input').first().focus(); //focus first input
+		$('input[value=Verify]').unbind().bind('click', function(){
+			if($('input[name=email]').val()>50) notify('Email too long! Must be shorter then 50 characters.');
+			$.post('/index.php', $('#verify-form').serialize()+"&register="+encodeURIComponent(false), function(data){
+				console.log(data);
+				$('#login-wrapper').html(data);
+			});
+			return false;
+		});
+	});
 });
 
 function validate(inputName, type, check) {

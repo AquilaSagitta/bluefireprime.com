@@ -16,7 +16,10 @@ class Model {
 		} else {
 			$data = $data->fetch_array();
 			if(password_verify($pass,$data[2])) {
-				return $user;
+				$ver = $data[3]==='0' ? false : true;
+				$acct = array('username'=>$user,'verified'=>$ver);
+				json_encode($acct);
+				return $acct;
 			} else {
 				return false;
 			}
@@ -34,23 +37,25 @@ class Model {
 		if(!$this->connect->sanitizeEmail($_POST['email'])) {
 			echo 'Invalid Email';
 		} else {
+			$user = $_SESSION['user'];
 			$a = $this->connect->sanitizeEmail($_POST['email']);
-			$this->connect->updateItem($_POST['user'],'primaryEmail',$a,true);
+			$this->connect->updateItem($user,'primaryEmail',$a,true);
 			
 			$key = md5( rand(0,1000) );
-			$this->connect->updateItem($_POST['user'],'hash',$key,false);
+			$this->connect->updateItem($user,'hash',$key,false);
 			
 			$from = 'noreply@bluefireprime.com';
 			$subject = 'bluefireprime.com Verification';
-			$message = 'Hello '.$_POST['user'].",\n
+			$message = 'Hello '.$user.",\n
 	You recently requested a verification email from bluefireprime.com.\n\n
-	Click this link to verify your account: https://bluefireprime.com/pubmod/verified.php?user=".$_POST['user']."&key=".$key;
+	Click this link to verify your account: https://bluefireprime.com/pubmod/verified.php?user=".$user."&key=".$key;
 			
 			if(mail($a,$subject,$message,"From: $from\n")) {
 				echo 'An email was sent to '.$a.' with a verification link.';
 			} else {
 				echo 'Email failed!';
 			}
+			session_destroy();
 		}
 	}
 	
