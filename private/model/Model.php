@@ -48,7 +48,7 @@ class Model {
 			$subject = 'bluefireprime.com Verification';
 			$message = 'Hello '.$user.",\n
 	You recently requested a verification email from bluefireprime.com.\n\n
-	Click this link to verify your account: https://bluefireprime.com/pubmod/verified.php?user=".$user."&key=".$key;
+	Click this link to verify your account: https://bluefireprime.com/index.php?user=".$user."&key=".$key;
 			
 			if(mail($a,$subject,$message,"From: $from\n")) {
 				echo 'An email was sent to '.$a.' with a verification link.';
