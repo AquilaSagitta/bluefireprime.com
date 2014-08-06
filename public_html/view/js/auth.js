@@ -4,7 +4,10 @@ $('#login-button').unbind().bind('click',function() {
 	$('#login-wrapper').load("view/forms/login.html", function() {
 		$('input').first().focus(); //focus first input
 		$('input[value=Login]').unbind().bind('click', function() {
-			if(!validate('user','text',0)||!validate('pass','text',0)) return false;
+			if(!validate('user','text',0)||!validate('pass','text',0)) {
+				notify('Fill required fields!');
+				return false;
+			}
 			if(!validate('honey','trap',0)) return;
 			$.post('/index.php', $('#login-form').serialize()+"&login="+encodeURIComponent(true), function(data) {
 				console.log(data);
@@ -30,8 +33,14 @@ $('#login-wrapper').on('click','input[value=ToRegister]', function(){
 		}
 		if(!user&&!pass) $('input').first().focus(); //focus first input
 		$('input[value=Register]').unbind().bind('click', function(){
-			if(!validate('user','text',0)||!validate('pass','text',0)||!validate('pass2','text',0)) return false;
-			if(!validate('pass','password','pass2')) return false;
+			if(!validate('user','text',0)||!validate('pass','text',0)||!validate('pass2','text',0)) {
+				notify('Fill required fields!');
+				return false;
+			}
+			if(!validate('pass','password','pass2')) {
+				notify('Passwords don\'t match!');
+				return false;
+			}
 			$.post('/index.php', $('#login-form').serialize()+"&register="+encodeURIComponent(true), function(data) {
 				console.log($('#login-form').serialize()+"&register="+encodeURIComponent(true));
 				$('#login-wrapper').html(data);
@@ -57,6 +66,10 @@ $('#notifications').on('click','#getVerified', function(){
 	});
 });
 
+$('#notifications').on('click','.note-close', function(){
+	$(this).parent().remove();
+});
+
 function validate(inputName, type, check) {
 	switch (type) {
 		case 'text':
@@ -78,7 +91,6 @@ function validate(inputName, type, check) {
 				$('input[name='+check+']').removeClass('error');
 				return true;
 			} else {
-				notify('Passwords don\'t match!')
 				$('input[name='+inputName+']').addClass('error');
 				$('input[name='+check+']').addClass('error');
 				return false;
